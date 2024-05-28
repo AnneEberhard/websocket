@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<h1>Register</h1>
+
+<div id="passwordNoMatch" style="display: none;">
+    <p>Passwords do not match. Please try again.</p>
+</div>
+
+<div id="passwordNoValidate" style="display: none;">
+    <p>Password needs at least 8 characters and cannot be too common or entirely numeric. Please try again.</p>
+</div>
+
+<div id="error" style="display: none;">
+    <p>An error has occured. Please try again.</p>
+</div>
+
+
+<form onsubmit="handleRegister(); return false" method="POST">
+    {% csrf_token %}
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input required name="username" type="text" class="mdl-textfield__input" id="username">
+        <label class="mdl-textfield__label" for="sample3">your username</label>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input required name="email" type="email" class="mdl-textfield__input" id="email">
+        <label class="mdl-textfield__label" for="sample3">your email</label>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input required name="first_name" type="text" class="mdl-textfield__input" id="first_name">
+        <label class="mdl-textfield__label" for="sample3">your first name</label>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input name="last_name" type="text" class="mdl-textfield__input" id="last_name">
+        <label class="mdl-textfield__label" for="sample3">your last name</label>
+    </div>
+    <br>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input name="password" type="password" class="mdl-textfield__input" id="password">
+        <label class="mdl-textfield__label" for="sample3">your password (at least 8 characters)</label>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input name="repeatPassword" type="password" class="mdl-textfield__input" id="repeat_password">
+        <label class="mdl-textfield__label" for="sample3">please repeat your password</label>
+    </div>
+    <div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Register</button></div>
+</form>
+<h4>Already a user? Log in <a href="/login/">here.</a></h4>
+
+{% endblock %}

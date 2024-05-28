@@ -1,0 +1,56 @@
+.page-content {
+  padding: 100px 100px;
+}
+
+.colorGrey {
+  color: gray;
+}
+
+.colorRed {
+  color: red;
+}
+
+.central {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.disabled {
+  filter: grayscale(1);
+  color: gray !important;
+}
+
+#messageContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.messageBox {
+  margin: 4px;
+  background-color: pink;
+  padding: 8px;
+  width: 30vw;
+  overflow: auto;
+  border: blue 2px solid;
+  border-radius: 10px;
+}
+
+.authorMessage {
+  margin-left: auto;
+}
+
+.sendingMessage {
+  background-color: antiquewhite !important;
+}
+
+.messageNotSent {
+  background-color: antiquewhite !important;
+  border: rgb(255,64,129) 2px solid;
+}
+
+@media(max-width:500px) {
+  .page-content {
+    padding: 20px 20px;
+  }
+}
