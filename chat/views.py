@@ -8,8 +8,16 @@ from django.contrib.auth.models import User
 import json
 
 
-@login_required(login_url='/login/')
 def index(request):
+    return render(request, "chat/index.html")
+
+def room(request, room_name):
+    return render(request, "chat/room.html", {"room_name": room_name})
+
+
+
+@login_required(login_url='/login/')
+def chatIndex(request):
     """
     This functions renders the chat.html.
     """
