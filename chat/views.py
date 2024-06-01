@@ -7,12 +7,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import json
 
-
+@login_required(login_url='/login/')
 def index(request):
+    """
+    This functions renders the entry site.
+    """
     return render(request, "chat/index.html")
 
+
+@login_required(login_url='/login/')
 def room(request, room_name):
-    return render(request, "chat/room.html", {"room_name": room_name})
+    """
+    This functions renders the room.
+    """
+    chat, created = Chat.objects.get_or_create(room_name=room_name)
+
+    messages = Message.objects.filter(chat=chat).order_by('created_at')
+    
+    return render(request, "chat/room.html", {"room_name": room_name, "messages": messages})
 
 
 

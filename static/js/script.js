@@ -1,30 +1,6 @@
 const activeUser = document.currentScript.getAttribute("data-username");
 const csrfToken = document.currentScript.getAttribute("data-csrf-token");
 
-async function sendMessage() {
-  let fd = new FormData();
-  let token = csrfToken;
-  let user = activeUser;
-  fd.append("textmessage", messageField.value);
-  fd.append("csrfmiddlewaretoken", token);
-  try {
-    renderSendingMessage(messageField.value, user);
-    let response = await fetch("/chat/", {
-      method: "POST",
-      body: fd,
-    });
-    let jsonText = await response.json();
-    let json = JSON.parse(jsonText);
-    renderSentMessage(
-      json["fields"]["text"],
-      json["fields"]["author"],
-      json["fields"]["created_at"]
-    );
-  } catch (e) {
-    console.log("Error:", e);
-    renderMessageNotSent(messageField.value, user);
-  }
-}
 
 function getCurrentFormattedDate() {
   const options = {
@@ -38,23 +14,6 @@ function getCurrentFormattedDate() {
   return monthWithDot;
 }
 
-function renderSendingMessage(newMessageText, user) {
-  const formattedDate = getCurrentFormattedDate();
-  messageContainer.innerHTML += `
-      <div id="deleteMessage" class="messageBox authorMessage sendingMessage">
-        <span class="colorGrey">[${formattedDate}] </span>${user}: <i class="colorGrey">${newMessageText}</i>
-      </div>`;
-}
-
-function renderSentMessage(newMessageText, user, createdAt) {
-  const formattedDate = getCurrentFormattedDate(new Date(createdAt));
-  document.getElementById("deleteMessage").remove();
-  messageContainer.innerHTML += `
-    <div class="messageBox authorMessage">
-    <span class="colorGrey">[${formattedDate}] </span>${user}: <i>${newMessageText}</i>
-    </div>`;
-  messageField.value = "";
-}
 
 function renderMessageNotSent(newMessageText, user) {
   const formattedDate = getCurrentFormattedDate();
@@ -69,8 +28,9 @@ async function handleLogin() {
   let formElements = ["username", "password"];
   let username = document.getElementById("username").value;
   let password = document.getElementById("password").value;
+  let token = document.querySelector('[name=csrfmiddlewaretoken]').value;
   let fd = new FormData();
-  let token = csrfToken;
+  
   fd.append("username", username);
   fd.append("password", password);
   fd.append("csrfmiddlewaretoken", token);
@@ -165,8 +125,9 @@ async function getRegisterData() {
   let last_name = document.getElementById("last_name").value;
   let password = document.getElementById("password").value;
   let repeat_password = document.getElementById("repeat_password").value;
+  let token = document.querySelector('[name=csrfmiddlewaretoken]').value;
   let fd = new FormData();
-  let token = csrfToken;
+
   fd.append("username", username);
   fd.append("email", email);
   fd.append("first_name", first_name);

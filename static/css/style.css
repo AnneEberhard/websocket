@@ -26,6 +26,10 @@
   flex-direction: column;
 }
 
+#room-name-input {
+  padding: 8px;
+}
+
 .messageBox {
   margin: 4px;
   background-color: pink;

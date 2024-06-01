@@ -1,46 +1,67 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Chat Room</title>
-</head>
-<body>
-    <h1>{{room_name}}</h1>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
-    {{ room_name|json_script:"room-name" }}
-    <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+{% extends "base.html" %}
 
+{% block content %}
+  {% if request.user.is_authenticated %}
+    <h1>{{ room_name }}</h1>
+    <div id="messageContainer">
+      {% for message in messages %}
+        <div class="messageBox {% if message.author == request.user %}authorMessage{% endif %}">
+          <span class="colorGrey">[{{ message.created_at }}]</span><br>
+          {{ message.author.first_name }}: <i>{{ message.text }}</i>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="central">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" name="textmessage" type="text" id="messageField" />
+        <label class="mdl-textfield__label" for="messageField">Text...</label>
+      </div>
+      <input id="chat-message-submit" type="button" value="Send" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        let roomName = "{{ room_name }}";
         const chatSocket = new WebSocket(
             `ws://${window.location.host}/ws/chat/${roomName}/`
         );
 
         chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+          const data = JSON.parse(e.data);
+          const messageBox = document.createElement('div');
+          messageBox.classList.add('messageBox','authorMessage');
+          messageBox.innerHTML = `<span class="colorGrey">[${data.created_at}]</span><br>${data.author}: <i>${data.message}</i>`;
+          document.querySelector('#messageContainer').appendChild(messageBox);
         };
 
         chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
+            console.log(e);
+          console.error("Chat socket closed unexpectedly");
         };
 
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.key === 'Enter') {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
+        document.querySelector("#messageField").onkeyup = function(e) {
+          if (e.key === 'Enter') {
+            document.querySelector('#chat-message-submit').click();
+          }
         };
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }));
-            messageInputDom.value = '';
+          const messageInputDom = document.querySelector('#messageField');
+          const message = messageInputDom.value;
+          chatSocket.send(JSON.stringify({
+            'message': message,
+            'roomName': roomName 
+          }));
+          messageInputDom.value = '';
         };
+
+        // Aufruf von MDL-Komponenten aktualisieren
+        componentHandler.upgradeDom();
+      });
     </script>
-</body>
-</html>
+
+  {% else %}
+    <h1>Not logged in</h1>
+    <p>You are not logged in. Please log in.<br>Please click <a href="/login/">here</a>.</p>
+  {% endif %}
+{% endblock %}

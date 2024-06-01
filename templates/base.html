@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chatroom</title>
-
+    
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -15,6 +15,7 @@
     />
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
     <script src="{% static 'js/script.js' %}" data-username="{{ request.user.first_name }}" data-csrf-token="{{ csrf_token }}"></script>
     
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
