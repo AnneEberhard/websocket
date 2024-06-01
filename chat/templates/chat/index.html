@@ -6,7 +6,7 @@
     <h4>Click one of the buttons or enter a new name to create a new chatroom.</h4>
     <div id="chat-room-buttons">
         {% for chat in chat_rooms %}
-            <button onclick="location.href='/chat/{{ chat.room_name }}/'" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <button onclick="location.href='/chat/{{ chat.slug }}/'" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 {{ chat.room_name }}
             </button>
         {% endfor %}
@@ -37,8 +37,9 @@
             };
         
             submitButton.onclick = function() {
-                var roomName = inputField.value;
-                window.location.pathname = '/chat/' + roomName + '/';
+                let roomName = inputField.value;
+                let roomSlug = slugify(roomName); 
+                window.location.pathname = '/chat/' + roomSlug + '/';
             };
         });
     </script>

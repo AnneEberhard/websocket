@@ -1,12 +1,18 @@
 from django.db import models
-from datetime import date
 from django.conf import settings
 from django.utils import timezone
+from django.utils.text import slugify
 
 
 class Chat(models.Model):
     room_name = models.CharField(max_length=255, unique=True, default='')
+    slug = models.SlugField(max_length=255, unique=True, blank=True,default='')
     created_at = models.DateField(default=timezone.now)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.room_name)
+        super(Chat, self).save(*args, **kwargs)    
+
 
 class Message(models.Model):
     text = models.CharField(max_length=500)

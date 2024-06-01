@@ -17,15 +17,17 @@ def index(request):
 
 
 @login_required(login_url='/login/')
-def room(request, room_name):
+def room(request, room_slug):
     """
     This functions renders the room.
     """
-    chat, created = Chat.objects.get_or_create(room_name=room_name)
+    room_name = room_slug.replace('-', ' ').title()
+
+    chat, created = Chat.objects.get_or_create(slug=room_slug, defaults={'room_name': room_name})
 
     messages = Message.objects.filter(chat=chat).order_by('created_at')
     
-    return render(request, "chat/room.html", {"room_name": room_name, "messages": messages})
+    return render(request, "chat/room.html", {"room_name": chat.room_name, "slug": chat.slug,"messages": messages})
 
 
 def login_view(request):

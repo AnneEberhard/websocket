@@ -1,5 +1,15 @@
 const activeUser = document.currentScript.getAttribute("data-username");
 
+function slugify(text) {
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')           // Ersetze Leerzeichen durch Bindestriche
+    .replace(/[^\w\-]+/g, '')       // Entferne alle nicht Wort-Zeichen
+    .replace(/\-\-+/g, '-')         // Ersetze mehrfache Bindestriche durch einen einzigen Bindestrich
+    .replace(/^-+/, '')             // Schneide führende Bindestriche ab
+    .replace(/-+$/, '');            // Schneide anhängende Bindestriche ab
+}
+
+
 async function handleLogin() {
   let formElements = ["username", "password"];
   let username = document.getElementById("username").value;

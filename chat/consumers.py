@@ -2,14 +2,13 @@ import json
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-
 from .models import Chat, Message
 
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-        self.room_group_name = f"chat_{self.room_name}"
+        self.room_slug = self.scope["url_route"]["kwargs"]["room_slug"]
+        self.room_group_name = f"chat_{self.room_slug}"
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -34,9 +33,9 @@ class ChatConsumer(WebsocketConsumer):
         # Save message in database
         if user.is_authenticated:
             try:
-                chat = Chat.objects.get(room_name=room_name)  
+                chat = Chat.objects.get(slug=self.room_slug)  
             except Chat.DoesNotExist:
-                chat = None  # Optional: Erstelle den Chatraum, wenn er nicht existiert
+                chat = None  
 
             if chat:
                 new_message = Message.objects.create(
