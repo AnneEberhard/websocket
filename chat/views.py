@@ -10,9 +10,10 @@ import json
 @login_required(login_url='/login/')
 def index(request):
     """
-    This functions renders the entry site.
+    This function renders the entry site with a list of chat rooms.
     """
-    return render(request, "chat/index.html")
+    chat_rooms = Chat.objects.all()
+    return render(request, "chat/index.html", {'chat_rooms': chat_rooms})
 
 
 @login_required(login_url='/login/')
@@ -25,32 +26,6 @@ def room(request, room_name):
     messages = Message.objects.filter(chat=chat).order_by('created_at')
     
     return render(request, "chat/room.html", {"room_name": room_name, "messages": messages})
-
-
-
-@login_required(login_url='/login/')
-def chatIndex(request):
-    """
-    This functions renders the chat.html.
-    """
-    username = request.user.first_name if request.user.is_authenticated else "DefaultUsername" 
-    if request.method == 'POST':    
-        myChat = Chat.objects.get(id=1)
-        newMessage = Message.objects.create(text=request.POST['textmessage'], chat=myChat, author=request.user, receiver=request.user)
-        serializedMessage = json.dumps([{
-            "model": "chat.message",
-            "pk": newMessage.pk,
-            "fields": {
-                "text": newMessage.text,
-                "created_at": str(newMessage.created_at),
-                "author": request.user.first_name,
-                "receiver": newMessage.receiver_id,
-                "chat": newMessage.chat_id,
-            }
-        }])
-        return JsonResponse(serializedMessage[1:-1], safe=False, content_type='application/json')
-    chatMessages = Message.objects.filter(chat__id=1) 
-    return render(request, 'chat/index.html', {'messages': chatMessages,'username': username }) 
 
 
 def login_view(request):

@@ -1,28 +1,4 @@
 const activeUser = document.currentScript.getAttribute("data-username");
-const csrfToken = document.currentScript.getAttribute("data-csrf-token");
-
-
-function getCurrentFormattedDate() {
-  const options = {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  };
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString("en-US", options);
-  const monthWithDot = formattedDate.replace(/^(\w+)( \d+, \d+)$/, "$1.$2");
-  return monthWithDot;
-}
-
-
-function renderMessageNotSent(newMessageText, user) {
-  const formattedDate = getCurrentFormattedDate();
-  document.getElementById("deleteMessage").remove();
-  messageContainer.innerHTML += `
-    <div class="messageBox authorMessage messageNotSent">
-    <span class="colorGrey">[${formattedDate}] </span>${user}: <i class="colorRed">${newMessageText} (Message not sent)</i>
-    </div>`;
-}
 
 async function handleLogin() {
   let formElements = ["username", "password"];
