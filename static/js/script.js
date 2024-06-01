@@ -1,15 +1,27 @@
 const activeUser = document.currentScript.getAttribute("data-username");
 
+/**
+ * Converts a string to a URL-friendly slug format by transforming it to lower case,
+ * replacing spaces with hyphens, removing non-word characters, and eliminating 
+ * multiple or trailing hyphens.
+ *
+ * @param {string} text - The string to be slugified.
+ * @returns {string} The slugified string, suitable for URLs.
+ */
 function slugify(text) {
   return text.toString().toLowerCase()
-    .replace(/\s+/g, '-')           // Ersetze Leerzeichen durch Bindestriche
-    .replace(/[^\w\-]+/g, '')       // Entferne alle nicht Wort-Zeichen
-    .replace(/\-\-+/g, '-')         // Ersetze mehrfache Bindestriche durch einen einzigen Bindestrich
-    .replace(/^-+/, '')             // Schneide führende Bindestriche ab
-    .replace(/-+$/, '');            // Schneide anhängende Bindestriche ab
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')          
+    .replace(/-+$/, '');            
 }
 
-
+/**
+ * Handles the user login process by submitting username and password to the server,
+ * and managing the response to either redirect the user or show an error message.
+ * Disables the form fields during the request and re-enables them afterward.
+ */
 async function handleLogin() {
   let formElements = ["username", "password"];
   let username = document.getElementById("username").value;
@@ -38,6 +50,10 @@ async function handleLogin() {
   enableFields(formElements);
 }
 
+/**
+ * Disables the input fields and adds a 'disabled' class to them.
+ * @param {Array<string>} elementsArray - An array of element IDs to be disabled.
+ */
 function disableFields(elementsArray) {
   elementsArray.forEach((element) => {
     document.getElementById(element).disabled = true;
@@ -45,6 +61,10 @@ function disableFields(elementsArray) {
   });
 }
 
+/**
+ * Enables the input fields and removes the 'disabled' class from them.
+ * @param {Array<string>} elementsArray - An array of element IDs to be enabled.
+ */
 function enableFields(elementsArray) {
   elementsArray.forEach((element) => {
     document.getElementById(element).disabled = false;
@@ -52,6 +72,11 @@ function enableFields(elementsArray) {
   });
 }
 
+/**
+ * Displays an error message and clears the values of specified input fields.
+ * @param {string} divId - The ID of the div that displays the error message.
+ * @param {Array<string>} elementsArray - An array of element IDs whose values will be cleared.
+ */
 function errorMessage(divId, elementsArray) {
   document.getElementById(divId).style.display = "block";
   elementsArray.forEach((element) => {
@@ -59,6 +84,12 @@ function errorMessage(divId, elementsArray) {
   });
 }
 
+/**
+ * Handles the user registration process by submitting registration data to the server,
+ * validating the password, and managing the response to either redirect the user or show error messages.
+ * Disables the form fields during the request and re-enables them afterward.
+ * Uses various helper functions to validate data, manage UI messages, and gather form data.
+ */
 async function handleRegister() {
   let formElements = [
     "username",
@@ -104,6 +135,10 @@ async function handleRegister() {
   }
 }
 
+/**
+ * Collects and packages registration data from form fields into a FormData object.
+ * @returns {FormData} A FormData object containing the user registration data.
+ */
 async function getRegisterData() {
   let username = document.getElementById("username").value;
   let email = document.getElementById("email").value;
@@ -124,10 +159,19 @@ async function getRegisterData() {
   return fd;
 }
 
+/**
+ * Hides the error message display for a given div.
+ * @param {string} divId - The ID of the div where the error message is displayed.
+ */
 function clearErrorMessage(divId) {
   document.getElementById(divId).style.display = "none";
 }
 
+/**
+ * Validates a password to ensure it meets specific criteria.
+ * @param {string} password - The password to validate.
+ * @returns {boolean} True if the password meets the criteria, false otherwise.
+ */
 function validatePassword(password) {
   if (password.length < 8) {
     return false;
@@ -138,6 +182,9 @@ function validatePassword(password) {
   return true;
 }
 
+/**
+ * Clears the password and repeat password fields on the form.
+ */
 function  clearPasswortFields() {
   document.getElementById('password').value = "";
   document.getElementById('repeat_password').value = "";

@@ -1,16 +1,19 @@
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import redirect, render
-from django.urls import resolve, reverse
+from django.shortcuts import render
 from .models import Chat,  Message
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-import json
+
 
 @login_required(login_url='/login/')
 def index(request):
     """
-    This function renders the entry site with a list of chat rooms.
+    Renders the chat index page that lists all available chat rooms.
+    Requires user to be authenticated to access this page.
+
+    :param request: HttpRequest object.
+    :return: HttpResponse object with the rendered template.
     """
     chat_rooms = Chat.objects.all()
     return render(request, "chat/index.html", {'chat_rooms': chat_rooms})
@@ -19,7 +22,12 @@ def index(request):
 @login_required(login_url='/login/')
 def room(request, room_slug):
     """
-    This functions renders the room.
+    Renders a specific chat room identified by a slug. If the room does not exist, it is created.
+    Requires user to be authenticated to access this page.
+
+    :param request: HttpRequest object.
+    :param room_slug: The slug of the chat room to render.
+    :return: HttpResponse object with the rendered template.
     """
     room_name = room_slug.replace('-', ' ').title()
 
@@ -32,7 +40,11 @@ def room(request, room_slug):
 
 def login_view(request):
     """
-    This function processes the login request and returns a JSON response for POST and a HTTP for other requests.
+    Processes the login request. If POST, it authenticates the user and returns a JSON response.
+    If not POST, returns the login page.
+
+    :param request: HttpRequest object.
+    :return: JsonResponse if POST, otherwise HttpResponse with rendered template.
     """
     redirect = request.GET.get('next')
     if request.method == 'POST':
@@ -51,7 +63,11 @@ def login_view(request):
 
 def register_view(request):
     """
-    This functions processes the register request and returns a JSON response for POST and a HTTP for other requests.
+    Handles the registration of new users. If POST, it processes the form data, attempts to create a new user,
+    and returns a JSON response. If not POST, returns the registration page.
+
+    :param request: HttpRequest object.
+    :return: JsonResponse if POST, otherwise HttpResponse with rendered template.
     """
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -74,7 +90,10 @@ def register_view(request):
 
 def logout_view(request):
     """
-    This functions initates logout and returns to login.html.
+    Logs out the current user and redirects to the login page.
+
+    :param request: HttpRequest object.
+    :return: HttpResponseRedirect to the login page.
     """
     logout(request)
     return HttpResponseRedirect('/login/')
@@ -82,13 +101,19 @@ def logout_view(request):
 
 def imprint_view(request):
     """
-    This functions renders the imprint.html.
+    Renders the imprint page.
+
+    :param request: HttpRequest object.
+    :return: HttpResponse with the rendered template.
     """
     return render(request, 'legal/imprint.html')
 
 
 def privacy_policy_view(request):
     """
-    This functions renders the privacy_policy.html.
+    Renders the privacy policy page.
+
+    :param request: HttpRequest object.
+    :return: HttpResponse with the rendered template.
     """
     return render(request, 'legal/privacy_policy.html')
