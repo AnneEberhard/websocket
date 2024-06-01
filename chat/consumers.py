@@ -49,9 +49,9 @@ class ChatConsumer(WebsocketConsumer):
         # Save message in database
         if user.is_authenticated:
             try:
-                chat = Chat.objects.get(slug=self.room_slug)  
+                chat = Chat.objects.get(slug=self.room_slug)
             except Chat.DoesNotExist:
-                chat = None  
+                chat = None
 
             if chat:
                 new_message = Message.objects.create(
@@ -90,4 +90,3 @@ class ChatConsumer(WebsocketConsumer):
             "author": author,
             "created_at": created_at
         }))
-        

@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from .models import Chat,  Message
+from .models import Chat, Message
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -34,8 +34,8 @@ def room(request, room_slug):
     chat, created = Chat.objects.get_or_create(slug=room_slug, defaults={'room_name': room_name})
 
     messages = Message.objects.filter(chat=chat).order_by('created_at')
-    
-    return render(request, "chat/room.html", {"room_name": chat.room_name, "slug": chat.slug,"messages": messages})
+
+    return render(request, "chat/room.html", {"room_name": chat.room_name, "slug": chat.slug, "messages": messages})
 
 
 def login_view(request):
@@ -51,7 +51,7 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
-        
+
         if user:
             login(request, user)
             return JsonResponse({'success': True, 'redirect': redirect or '/chat/'}, safe=False, content_type='application/json')
@@ -83,7 +83,8 @@ def register_view(request):
             else:
                 return JsonResponse({'success': False, 'passwordNoMatch': True}, safe=False, content_type='application/json')
         except Exception as e:
-                return JsonResponse({'success': False, 'error': True}, safe=False, content_type='application/json')
+            print(e)
+            return JsonResponse({'success': False, 'error': True}, safe=False, content_type='application/json')
     else:
         return render(request, 'auth/register.html')
 

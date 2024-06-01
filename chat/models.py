@@ -7,14 +7,14 @@ from django.utils.text import slugify
 class Chat(models.Model):
     """
     Represents a chat room where users can exchange messages.
-    
+
     Attributes:
         room_name (str): The name of the chat room.
         slug (str): URL-friendly version of the chat room name, used in links and routing.
         created_at (date): The date when the chat room was created.
     """
     room_name = models.CharField(max_length=255, unique=True, default='')
-    slug = models.SlugField(max_length=255, unique=True, blank=True,default='')
+    slug = models.SlugField(max_length=255, unique=True, blank=True, default='')
     created_at = models.DateField(default=timezone.now)
 
     def save(self, *args, **kwargs):
@@ -22,7 +22,7 @@ class Chat(models.Model):
         Overridden save method to automatically generate a slug from the room name.
         """
         self.slug = slugify(self.room_name)
-        super(Chat, self).save(*args, **kwargs)    
+        super(Chat, self).save(*args, **kwargs)
 
 
 class Message(models.Model):
@@ -42,4 +42,3 @@ class Message(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_message_set')
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='receiver_message_set', default=None, blank=True, null=True)
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='chat_message_set', default=None, blank=True, null=True)
-        

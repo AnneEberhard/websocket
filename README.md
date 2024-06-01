@@ -5,4 +5,6 @@ js code specific for websockets is in the html docs in the folder root/chat/temp
 
 In this case, frontend and backend was not specifically separated to show the use of django in html. The base templet for all html files is in root/templates.
 
-Documentation is made via sphinx.
+Documentation is made via sphinx. To start, navigate to docs and type make html.
+
+For style, flake8 is installed. run flake8 in CMD.
