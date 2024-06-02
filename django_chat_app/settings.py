@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-n_)v34rb6)818^ab@eaoss-48vx@fosy-&-!&bsf2)jm66wf10
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['annessimplechat.pythonanywhere.com']
 
 
 # Application definition
