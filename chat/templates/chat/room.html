@@ -24,7 +24,7 @@
         let roomName = "{{ room_name }}";
         let roomSlug = "{{ slug }}";
         const chatSocket = new WebSocket(
-            `ws://${window.location.host}/ws/chat/${roomSlug}/`
+            `wss://${window.location.host}/ws/chat/${roomSlug}/`
         );
 
         chatSocket.onmessage = function(e) {
